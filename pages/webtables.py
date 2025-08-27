@@ -5,89 +5,59 @@ from pages.base_page import BasePage
 class WebTables(BasePage):
     base_url = "https://demoqa.com/webtables"
 
-
-    ADD_BTN = (By.ID, "addNewRecordButton")
-    MODAL = (By.CSS_SELECTOR, ".modal-content")
-    SUBMIT = (By.ID, "submit")
-
-
-    FN = (By.ID, "firstName")
-    LN = (By.ID, "lastName")
-    EMAIL = (By.ID, "userEmail")
-    AGE = (By.ID, "age")
-    SALARY = (By.ID, "salary")
-    DEPT = (By.ID, "department")
-
-
-    ROWS = (By.CSS_SELECTOR, ".rt-tbody .rt-tr-group")
-    LAST_ROW_TDS = (By.CSS_SELECTOR, ".rt-tbody .rt-tr-group:last-child .rt-td")
-    LAST_ROW_EDIT = (By.CSS_SELECTOR, ".rt-tbody .rt-tr-group:last-child [id^='edit-record-']")
-    LAST_ROW_DELETE = (By.CSS_SELECTOR, ".rt-tbody .rt-tr-group:last-child [id^='delete-record-']")
-
-
     def open_add(self):
-        by, value = self.ADD_BTN
-        self.driver.find_element(by, value).click()
+        self.driver.find_element(By.CSS_SELECTOR, "#addNewRecordButton").click()
 
     def submit(self):
-        by, value = self.SUBMIT
-        self.driver.find_element(by, value).click()
+        self.driver.find_element(By.CSS_SELECTOR, "#submit").click()
 
     def modal_visible(self) -> bool:
-        by, value = self.MODAL
-        els = self.driver.find_elements(by, value)
-        return bool(els and els[0].is_displayed())
-
-    def _clear_and_type(self, locator, text: str):
-        by, value = locator
-        el = self.driver.find_element(by, value)
-        el.clear()
-        el.send_keys(text)
+        modals = self.driver.find_elements(By.CSS_SELECTOR, ".modal-content")
+        return bool(modals and modals[0].is_displayed())
 
     def fill_form(self, first, last, email, age, salary, dept):
-        self._clear_and_type(self.FN, str(first))
-        self._clear_and_type(self.LN, str(last))
-        self._clear_and_type(self.EMAIL, str(email))
-        self._clear_and_type(self.AGE, str(age))
-        self._clear_and_type(self.SALARY, str(salary))
-        self._clear_and_type(self.DEPT, str(dept))
+        self.driver.find_element(By.CSS_SELECTOR, "#firstName").clear()
+        self.driver.find_element(By.CSS_SELECTOR, "#firstName").send_keys(first)
+
+        self.driver.find_element(By.CSS_SELECTOR, "#lastName").clear()
+        self.driver.find_element(By.CSS_SELECTOR, "#lastName").send_keys(last)
+
+        self.driver.find_element(By.CSS_SELECTOR, "#userEmail").clear()
+        self.driver.find_element(By.CSS_SELECTOR, "#userEmail").send_keys(email)
+
+        self.driver.find_element(By.CSS_SELECTOR, "#age").clear()
+        self.driver.find_element(By.CSS_SELECTOR, "#age").send_keys(str(age))
+
+        self.driver.find_element(By.CSS_SELECTOR, "#salary").clear()
+        self.driver.find_element(By.CSS_SELECTOR, "#salary").send_keys(str(salary))
+
+        self.driver.find_element(By.CSS_SELECTOR, "#department").clear()
+        self.driver.find_element(By.CSS_SELECTOR, "#department").send_keys(dept)
 
     def rows_count(self) -> int:
-        by, value = self.ROWS
-        return len(self.driver.find_elements(by, value))
+        return len(self.driver.find_elements(By.CSS_SELECTOR, ".rt-tbody .rt-tr-group"))
 
     def last_row_values(self):
-        # Порядок: First Name, Last Name, Age, Email, Salary, Department, Action
-        by, value = self.LAST_ROW_TDS
-        tds = self.driver.find_elements(by, value)
+        tds = self.driver.find_elements(
+            By.CSS_SELECTOR, ".rt-tbody .rt-tr-group:last-child .rt-td"
+        )
         return [td.text for td in tds[:6]]
 
     def edit_last_row(self):
-        by, value = self.LAST_ROW_EDIT
-        self.driver.find_element(by, value).click()
+        self.driver.find_element(
+            By.CSS_SELECTOR, ".rt-tbody .rt-tr-group:last-child [id^='edit-record-']"
+        ).click()
 
     def delete_last_row(self):
-        by, value = self.LAST_ROW_DELETE
-        self.driver.find_element(by, value).click()
+        self.driver.find_element(
+            By.CSS_SELECTOR, ".rt-tbody .rt-tr-group:last-child [id^='delete-record-']"
+        ).click()
 
     def form_values(self):
-       
-        by, value = self.FN
-        fn = self.driver.find_element(by, value).get_attribute("value")
-
-        by, value = self.LN
-        ln = self.driver.find_element(by, value).get_attribute("value")
-
-        by, value = self.AGE
-        age = self.driver.find_element(by, value).get_attribute("value")
-
-        by, value = self.EMAIL
-        email = self.driver.find_element(by, value).get_attribute("value")
-
-        by, value = self.SALARY
-        salary = self.driver.find_element(by, value).get_attribute("value")
-
-        by, value = self.DEPT
-        dept = self.driver.find_element(by, value).get_attribute("value")
-
+        fn = self.driver.find_element(By.CSS_SELECTOR, "#firstName").get_attribute("value")
+        ln = self.driver.find_element(By.CSS_SELECTOR, "#lastName").get_attribute("value")
+        age = self.driver.find_element(By.CSS_SELECTOR, "#age").get_attribute("value")
+        email = self.driver.find_element(By.CSS_SELECTOR, "#userEmail").get_attribute("value")
+        salary = self.driver.find_element(By.CSS_SELECTOR, "#salary").get_attribute("value")
+        dept = self.driver.find_element(By.CSS_SELECTOR, "#department").get_attribute("value")
         return [fn, ln, age, email, salary, dept]
