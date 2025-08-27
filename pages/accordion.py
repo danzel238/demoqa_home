@@ -18,22 +18,22 @@ class Accordion:
         self.browser.get(self.url)
 
   
-    @property
+   
     def section1_content_p(self):
         return self.browser.find_element(*self.SECTION1_CONTENT_P)
+        
 
-    @property
     def section1_heading(self):
         return self.browser.find_element(*self.SECTION1_HEADING)
+        
 
-    @property
     def section2_p1(self):
         return self.browser.find_element(*self.SECTION2_P1)
+        
 
-    @property
     def section2_p2(self):
         return self.browser.find_element(*self.SECTION2_P2)
+        
 
-    @property
     def section3_p(self):
         return self.browser.find_element(*self.SECTION3_P)
